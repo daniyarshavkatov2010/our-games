@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Название игры</title>
+<style>
+  body { margin: 0; padding: 24px; background: #000; color: #f4f4f4; font-family: system-ui, "Segoe UI", sans-serif; text-align: center; }
+  a { color: #4da3ff; }
+  canvas { display: block; margin: 16px auto; max-width: 100%; background: #111; border-radius: 12px; }
+</style>
+</head>
+<body>
+  <p><a href="../../">← Ко всем играм</a></p>
+  <h1>Название игры</h1>
+  <p>Очки: <span id="score">0</span>. Двигайся стрелками или WASD и лови жёлтые точки.</p>
+  <canvas id="game" width="400" height="400"></canvas>
+
+  <script>
+    // ВАША ИГРА ЖИВЁТ ЗДЕСЬ. Это маленький пример: удалите его и пишите своё.
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const player = { x: 185, y: 185, size: 30 };
+    let dot = newDot();
+    let score = 0;
+    const keys = {};
+
+    addEventListener("keydown", e => { keys[e.code] = true; if (e.code.startsWith("Arrow")) e.preventDefault(); });
+    addEventListener("keyup", e => { keys[e.code] = false; });
+
+    function newDot() {
+      return { x: 10 + Math.random() * 370, y: 10 + Math.random() * 370, size: 20 };
+    }
+
+    function update() {
+      if (keys.ArrowLeft || keys.KeyA) player.x -= 4;
+      if (keys.ArrowRight || keys.KeyD) player.x += 4;
+      if (keys.ArrowUp || keys.KeyW) player.y -= 4;
+      if (keys.ArrowDown || keys.KeyS) player.y += 4;
+      player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+      player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+      if (Math.abs(player.x - dot.x) < 25 && Math.abs(player.y - dot.y) < 25) {
+        score++;
+        document.getElementById("score").textContent = score;
+        dot = newDot();
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#ffd23f";
+      ctx.fillRect(dot.x, dot.y, dot.size, dot.size);
+      ctx.fillStyle = "#4da3ff";
+      ctx.fillRect(player.x, player.y, player.size, player.size);
+    }
+
+    function loop() { update(); draw(); requestAnimationFrame(loop); }
+    loop();
+  </script>
+</body>
+</html>

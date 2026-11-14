@@ -1,14 +1,59 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Наши игры</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Наши игры</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #000; color: #f4f4f4; font-family: system-ui, "Segoe UI", sans-serif; }
+  header { max-width: 1040px; margin: 0 auto; padding: 56px 24px 28px; }
+  h1 { margin: 0; font: 800 clamp(2.4rem, 8vw, 4.6rem)/1 Unbounded, system-ui, sans-serif; letter-spacing: -0.03em; }
+  header p { margin: 14px 0 0; color: #8d8d96; font-size: 1.05rem; }
+  main { max-width: 1040px; margin: 0 auto; padding: 8px 24px 72px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .tile { display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; padding: 20px;
+          background: var(--c); color: #000; text-decoration: none; border-radius: 28px 28px 28px 6px;
+          transition: transform .15s ease; }
+  .tile:hover { transform: translateY(-6px) rotate(-1deg); }
+  .tile:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .emoji { font-size: 64px; line-height: 1; }
+  .title { margin: 0 0 6px; font: 800 1.45rem/1.15 Unbounded, system-ui, sans-serif; letter-spacing: -0.02em; }
+  .author { margin: 0 0 10px; font-weight: 700; font-size: .9rem; opacity: .75; }
+  .desc { margin: 0; font-size: .98rem; line-height: 1.4; }
+  .empty { color: #8d8d96; }
+  @media (prefers-reduced-motion: reduce) { .tile { transition: none; } .tile:hover { transform: none; } }
+</style>
 </head>
 <body>
+<header>
   <h1>Наши игры</h1>
-  <ul>
-    <li><a href="games/ivan-clicker/">Кликер от Вани</a></li>
-  </ul>
+  <p id="count"></p>
+</header>
+<main><div class="grid" id="grid"></div></main>
+<script src="games.js"></script>
+<script>
+  const grid = document.getElementById("grid");
+  document.getElementById("count").textContent = GAMES.length ? "Игр на сайте: " + GAMES.length + ". Выбирай и играй." : "";
+  if (!GAMES.length) grid.innerHTML = '<p class="empty">Пока игр нет. Добавьте первую в файл games.js.</p>';
+  GAMES.forEach(g => {
+    const a = document.createElement("a");
+    a.className = "tile";
+    a.href = g.path;
+    a.style.setProperty("--c", g.color || "#ffd23f");
+    const parts = [["emoji", g.emoji || "🎮"], ["title", g.title], ["author", "Автор: " + g.author], ["desc", g.description]];
+    const top = document.createElement("div"), bottom = document.createElement("div");
+    parts.forEach(([cls, text], i) => {
+      const el = document.createElement(cls === "title" ? "h2" : "p");
+      el.className = cls; el.textContent = text || "";
+      (i === 0 ? top : bottom).appendChild(el);
+    });
+    a.append(top, bottom);
+    grid.appendChild(a);
+  });
+</script>
 </body>
 </html>
