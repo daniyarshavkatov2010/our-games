@@ -10,4 +10,12 @@ const GAMES = [
     color: "#ffd23f",
     path: "games/ivan-clicker/"
   },
+  {
+  title: "Ферма-экспресс",
+  author: "Данияр",
+  description: "Сажай овощи, собирай урожай и обслуживай клиентов, пока они не ушли.",
+  emoji: "🥕",
+  color: "#7bd88f",
+  path: "farm.html"
+  },
 ];
